@@ -102,6 +102,11 @@
 import axios from "axios";
 
 export default {
+  created(){
+    const token = this.$store.getters.getToken
+    if(token!=null)
+      this.$router.push("/");
+  },
   data() {
     return {
       email: "",
@@ -126,7 +131,8 @@ export default {
         headers,
       })
       .then((res)=>{
-        console.log(res);
+        this.$store.commit("setToken",{token:res.data})
+        console.log(this.$store.getters.getToken)
         this.$router.push("/");
       })
       .catch((e)=>{

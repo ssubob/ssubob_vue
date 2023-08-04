@@ -136,7 +136,7 @@
           </div>
         </div>
       </div>
-      <div class="navbar navbar-dark bg-dark shadow-sm">
+      <div class="navbar navbar-dark bg-dark shadow-sm ">
         <div class="container">
           <a
             @click="getList()"
@@ -159,6 +159,8 @@
             </svg>
             <strong>SSUBOB</strong>
           </a>
+          <div>
+          <button type="button" class="btn btn-danger mx-2" @click="logout">로그아웃</button>
           <button
             class="navbar-toggler"
             type="button"
@@ -170,6 +172,7 @@
           >
             <span class="navbar-toggler-icon"></span>
           </button>
+          </div>
         </div>
       </div>
     </header>
@@ -288,6 +291,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -303,11 +308,33 @@ export default {
       const url = category
         ? `http://localhost:8080/place/${category}`
         : "http://localhost:8080/place";
-      this.placeList = await this.$api(url, "get");
+      const headers={
+        "Authorization":"Bearer "+this.$store.getters.getToken
+      }
+
+      console.log(headers)
+      await axios({
+        method: "get",
+        url,
+        headers
+      })
+      .then((res)=>{
+        console.log(res.data)
+        this.placeList = res.data
+      })
+      .catch((e)=>{
+        console.log(e);
+        this.$store.commit("setToken",{token:null});
+        this.$router.push("/login");
+      })
     },
-    goToPlace(place) {
+    goToPlace(place) {  
       window.location.href = place.url;
     },
+    logout(){
+      this.$store.commit("setToken",{token:null});
+        this.$router.push("/login");
+    }
   },
 };
 </script>
