@@ -4,9 +4,11 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import router from './router'
 import mixins from './mixins'
+import store from './store'
 
 
 const app = createApp(App)
 app.use(router)
-app.mixin(mixins);
+app.use(store)
+app.mixin(mixins)
 app.mount('#app')
