@@ -120,8 +120,8 @@ export default {
       this.$router.push("/signup")
     },
     async login() {
-      const url = "http://localhost:8080/token";
-      const headers={
+      let url = "http://localhost:8080/token";
+      let headers={
         "Authorization":"Basic "+btoa(this.email+":"+this.password)
       }
       console.log(headers);
@@ -132,7 +132,22 @@ export default {
       })
       .then((res)=>{
         this.$store.commit("setToken",{token:res.data})
-        console.log(this.$store.getters.getToken)
+      })
+      .catch((e)=>{
+        this.invalid=true
+        console.log(e)
+      })
+      url = "http://localhost:8080/user/nickname";
+      headers={
+        "Authorization":"Bearer "+this.$store.getters.getToken
+      }
+      await axios({
+        method:"get",
+        url,
+        headers,
+      })
+      .then((res)=>{
+        this.$store.commit("setNickname",{nickname:res.data})
         this.$router.push("/");
       })
       .catch((e)=>{

@@ -244,7 +244,7 @@
           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             <div v-for="place in placeList" :key="place.id" class="col">
               <div class="card shadow-sm">
-                <a :href="place.url" @click="goToPlace(place)">
+                  <a @click.prevent="goToPlace(place)">
                   <img
                     :src="place.image || defaultImage"
                     class="bd-placeholder-img card-img-top"
@@ -307,13 +307,13 @@ export default {
     async getList(category) {
 
       const url = category
-        ? `http://localhost:8080/place/${category}`
+        ? `http://localhost:8080/place/category/${category}`
         : "http://localhost:8080/place";
       const headers={
         "Authorization":"Bearer "+this.$store.getters.getToken
       }
 
-      console.log(headers)
+      console.log(headers) // 토큰 출력
       await axios({
         method: "get",
         url,
@@ -329,8 +329,9 @@ export default {
         this.$router.push("/login");
       })
     },
-    goToPlace(place) {  
-      window.location.href = place.url;
+    goToPlace(place) {
+      console.log(place.id)
+      this.$router.push({ name: 'detail', params: { id: place.id } });
     },
     logout(){
       this.$store.commit("setToken",{token:null});

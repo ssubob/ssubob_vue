@@ -91,6 +91,7 @@
 
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -107,8 +108,27 @@ export default {
   methods: {
     async getPlace() {
       const url = "http://localhost:8080/place/" + this.$route.params.id;
-      this.place = await this.$api(url, "get");
-      this.comments = this.place.comments;
+      
+      const headers={
+        "Authorization":"Bearer "+this.$store.getters.getToken
+      }
+      
+      await axios({
+        method: "get",
+        url,
+        headers
+      })
+      .then((res)=>{
+        console.log(res)
+        this.place = res.data
+        this.comments = this.place.comments;
+      })
+      .catch((e)=>{
+        console.log(e);
+        this.$store.commit("setToken",{token:null});
+        this.$router.push("/login");
+      })
+
     },
     async submitComment() {
       // 폼 유효성 검사를 할 수 있습니다.
@@ -116,23 +136,36 @@ export default {
         alert("Please enter a comment.");
         return;
       }
-
+  
       const url = "http://localhost:8080/comment/" + this.place.id;
       const data = {
-        name: "바보",
-        content: this.newComment, // 폼에서 입력한 댓글 내용
+        name: this.$store.getters.getNickname,
+        content: this.newComment // 폼에서 입력한 댓글 내용
         // 추가 필요한 데이터를 여기에 작성하세요.
       };
+      const headers={
+        "Authorization":"Bearer "+this.$store.getters.getToken
+      }
 
-      try {
-        await this.$api(url, "post", data);
-        // 요청이 성공하면 댓글을 초기화하고 목록 새로고침
+      console.log(this.$store.getters.getNickname)
+      await axios({
+        method: "post",
+        url,
+        data,
+        headers
+      })
+      .then(()=>{
         this.newComment = "";
         this.getPlace();
-      } catch (error) {
-        console.error(error);
-        alert("Failed to submit the comment.");
-      }
+      })
+      .catch((e)=>{
+        console.log(e);
+        this.$store.commit("setToken",{token:null});
+        this.$router.push("/login");
+      })
+
+
+     
   }
   }
 };
