@@ -1,6 +1,7 @@
 <template>
 <head>
 
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
@@ -15,6 +16,7 @@
 </head>
 
 <body>
+    
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="check2" viewBox="0 0 16 16">
             <path
@@ -119,6 +121,30 @@
 
     <main class="py-3">
 <section class="text-center container">
+       
+       
+
+   <div class="container my-4">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <h2 class="text-center mb-4">Leave a comment</h2>
+        <div class="card">
+          <div class="card-body">
+            <form>
+              <input type="hidden" id="loggedInUser" value="username">
+              <div class="mb-3">
+                <label for="comment" class="form-label">Comment</label>
+                <textarea class="form-control" id="comment" rows="3" placeholder="Write your comment here..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
             <div class="row py-lg-5">
                 <div class="col-lg-12 col-md-8 mx-auto">
                          
@@ -141,9 +167,9 @@
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
       <div v-for="place in placeList" :key="place.id" class="col">
         <div class="card shadow-sm">
-           <a :href="place.url" @click="goToPlace(place)">
-            <img :src="place.image || defaultImage" class="bd-placeholder-img card-img-top" width="100%" height="225"/>
-            </a>
+            <a @click.prevent="goToPlace(place)">
+        <img :src="place.image || defaultImage" class="bd-placeholder-img card-img-top" width="100%" height="225"/>
+        </a>
           <div class="card-body">
             <p class="card-text" ><strong> {{ place.title }} </strong></p>
             <hr/>
@@ -196,11 +222,11 @@ export default {
   },
  methods: {
     async getList(category) {
-      const url = category ? `http://localhost:8080/place/${category}` : "http://localhost:8080/place";
+      const url = category ? `http://localhost:8080/place/category/${category}` : "http://localhost:8080/place";
       this.placeList = await this.$api(url, "get");
     },
     goToPlace(place) {
-      window.location.href = place.url;
+       this.$router.push({ name: 'detail', params: { id: place.id } });
     }
   }
 }

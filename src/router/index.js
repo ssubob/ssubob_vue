@@ -1,12 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import PlaceView from '../views/PlaceView.vue'
+import DetailView from '../views/DetailView.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
     component: PlaceView
+  },
+  {
+    path: '/detail/:id',
+    name: 'detail',
+    component: DetailView
   }
 ]
 
