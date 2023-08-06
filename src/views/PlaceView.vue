@@ -307,8 +307,8 @@ export default {
     async getList(category) {
 
       const url = category
-        ? `http://localhost:8080/place/category/${category}`
-        : "http://localhost:8080/place";
+        ? (process.env.VUE_APP_SERVER_URL + `/place/category/${category}`)
+        : (process.env.VUE_APP_SERVER_URL + "/place");
       const headers={
         "Authorization":"Bearer "+this.$store.getters.getToken
       }

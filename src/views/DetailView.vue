@@ -107,7 +107,7 @@ export default {
   },
   methods: {
     async getPlace() {
-      const url = "http://localhost:8080/place/" + this.$route.params.id;
+      const url =  process.env.VUE_APP_SERVER_URL + "/place/" + this.$route.params.id;
       
       const headers={
         "Authorization":"Bearer "+this.$store.getters.getToken
@@ -137,7 +137,7 @@ export default {
         return;
       }
   
-      const url = "http://localhost:8080/comment/" + this.place.id;
+      const url = process.env.VUE_APP_SERVER_URL+ "/comment/" + this.place.id;
       const data = {
         name: this.$store.getters.getNickname,
         content: this.newComment // 폼에서 입력한 댓글 내용

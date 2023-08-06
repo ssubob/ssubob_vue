@@ -119,7 +119,7 @@ export default {
   },
   methods: {
     async signup() {
-      const url = "http://localhost:8080/user/create";
+      const url = process.env.VUE_APP_SERVER_URL + "/user/create";
       const data = {
         email: this.email,
         nickname: this.nickname,

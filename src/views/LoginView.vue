@@ -120,7 +120,7 @@ export default {
       this.$router.push("/signup")
     },
     async login() {
-      let url = "http://localhost:8080/token";
+      let url = process.env.VUE_APP_SERVER_URL+"/token";
       let headers={
         "Authorization":"Basic "+btoa(this.email+":"+this.password)
       }
@@ -137,7 +137,7 @@ export default {
         this.invalid=true
         console.log(e)
       })
-      url = "http://localhost:8080/user/nickname";
+      url = process.env.VUE_APP_SERVER_URL + "/user/nickname";
       headers={
         "Authorization":"Bearer "+this.$store.getters.getToken
       }
